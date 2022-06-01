@@ -1,4 +1,3 @@
-from token import MINEQUAL
 import discordio as io
 import embedbuilder as builder
 import jsonprocessor as json
