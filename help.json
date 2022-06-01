@@ -1,0 +1,18 @@
+{
+    "minesweeper":{
+        "minesweeper difficulty": "Lists the details of each difficulty",
+        "minesweeper new <difficulty>": "Creates a new minesweeper board of <difficulty>.",
+        "minesweeper open <x> <y>": "Opens the cell (<x>,<y>) on your minesweeper board.",
+        "minesweeper flag <x> <y>": "Flags the cell (<x>,<y>) on your minesweeper board.",
+        "minesweeper unflag <x> <y>": "Unflags the cell (<x>,<y>) on your minesweeper board.",
+        "minesweeper print": "Prints your minesweeper board."
+    },
+    "help":{
+        "help": "Lists all the commands.",
+        "help <command>": "Shows all the subcommands of <command>."
+    },
+    "cryptomine":{
+        "cryptomine shop": "List all purchasable mines.",
+        "cryptomine buy <model>": "Purchases a <model> mine."
+    }
+}
