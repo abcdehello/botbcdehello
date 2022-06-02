@@ -10,6 +10,7 @@ import jsonprocessor as json
 
 import cryptominer as miner
 import help as listhelp
+import hypixel as hyp
 import minecraftinfo as mcinfo
 import minesweeper as mine
 import wikipedia as wiki
@@ -93,6 +94,23 @@ async def wikipedia(ctx,*args):
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
     return
   await wiki.search(ctx,title)
+
+@bot.command(aliases=['hy'])
+async def hypixel(ctx,*args):
+  try:
+    action=str(args[0])
+  except:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+    return
+  if (action=='keycheck'):
+    await hyp.keyCheck(ctx)
+  elif (action=='status'):
+    try:
+      username=str(args[1])
+    except:
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    await hyp.statusCheck(ctx,username)
   
 
 @bot.command(aliases=['ms'])
@@ -151,13 +169,8 @@ async def minesweeper(ctx,*args):
       return
     if (await mine.unflagCell(ctx,str(ctx.author.id),x,y)):
       await mine.printBoard(ctx,str(ctx.author.id))
-  elif (action=='difficulty'):
-    desc=''
-    desc+='Easy: 5x5 board, 4 mines.\n'
-    desc+='Medium: 8x8 board, 12 mines.\n'
-    desc+='Hard: 10x10 board, 23 mines.\n'
-    desc+='Extreme: 14x14 board, 36 mines.\n'
-    await io.reply(ctx,'',await builder.buildDesc('Minesweeper Difficulty',desc,1))
+  elif (action=='difficulty') or (action=='diff'):
+    await mine.listdiff(ctx)
   else:
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
 
