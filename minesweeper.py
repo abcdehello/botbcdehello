@@ -143,3 +143,11 @@ async def makeBoard(userid,size,mcnt):
     playerdata[userid]['board']=board
     playerdata[userid]['status']=status
     await json.write('minesweeper.json',playerdata)
+
+async def listdiff(ctx):
+    desc=''
+    desc+='**Easy**: `5x5 board`, `4 mines`.\n'
+    desc+='**Medium**: `8x8 board`, `12 mines`.\n'
+    desc+='**Hard**: `10x10 board`, `23 mines`.\n'
+    desc+='**Extreme**: `14x14 board`, `36 mines`.\n'
+    await io.reply(ctx,'',await builder.buildDesc('Minesweeper Difficulty',desc,1))
