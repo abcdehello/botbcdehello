@@ -1,5 +1,3 @@
-# Bot-bcdehello.exe (will be)
+# Bot-bcdehello.exe
 
-When UT end I port back main bot to python and fuse with Gamebot
-
-Dump Gamebot file to github first in case anything goes wrong
+abcdehello's custom discord bot with ~~a lot of~~ useless features
