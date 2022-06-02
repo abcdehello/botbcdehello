@@ -1,18 +1,37 @@
 {
-    "minesweeper":{
-        "minesweeper difficulty": "Lists the details of each difficulty",
-        "minesweeper new <difficulty>": "Creates a new minesweeper board of <difficulty>.",
-        "minesweeper open <x> <y>": "Opens the cell (<x>,<y>) on your minesweeper board.",
-        "minesweeper flag <x> <y>": "Flags the cell (<x>,<y>) on your minesweeper board.",
-        "minesweeper unflag <x> <y>": "Unflags the cell (<x>,<y>) on your minesweeper board.",
-        "minesweeper print": "Prints your minesweeper board."
+    "game":{
+        "minesweeper":{
+            "minesweeper difficulty": "Lists the details of each difficulty",
+            "minesweeper new <difficulty>": "Creates a new minesweeper board of <difficulty>.",
+            "minesweeper open <x> <y>": "Opens the cell (<x>,<y>) on your minesweeper board.",
+            "minesweeper flag <x> <y>": "Flags the cell (<x>,<y>) on your minesweeper board.",
+            "minesweeper unflag <x> <y>": "Unflags the cell (<x>,<y>) on your minesweeper board.",
+            "minesweeper print": "Prints your minesweeper board."
+        },
+        "cryptomine":{
+            "cryptomine shop": "List all purchasable mines.",
+            "cryptomine buy <model>": "Purchases a <model> mine."
+        }
     },
-    "help":{
-        "help": "Lists all the commands.",
-        "help <command>": "Shows all the subcommands of <command>."
+    "search":{
+        "userinfo":{
+            "userinfo hamehistory <player>":"Lists the Minecraft name history of <player>",
+            "userinfo skin <player>":"Renders the current skin of <player>"
+        },
+        "wikipedia":{
+            "wikipedia search <title>":"Searches for articles with <title> on Wikipedia"
+        }
     },
-    "cryptomine":{
-        "cryptomine shop": "List all purchasable mines.",
-        "cryptomine buy <model>": "Purchases a <model> mine."
+    "support":{
+        "help":{
+            "help": "Lists all the commands.",
+            "help category <category>": "Shows all the commands in <category>.",
+            "help command <command>": "Shows all the subcommands of <command>."
+        }
+    },
+    "misc":{
+        "spam":{
+            "spam <message> <amount>": "Spams <message> <amount> amount of times. (WARNING: spamming is bad)"
+        }
     }
 }
