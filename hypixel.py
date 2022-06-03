@@ -24,7 +24,11 @@ async def statusCheck(ctx,playername):
         await keyCheck(ctx)
         return
     if (response['session']['online']):
-        playing=response['session']['gameType']+' - '+response['session']['mode']+' - '+response['session']['map']
-        await io.reply(ctx,'',await builder.buildDesc('Online Status of '+playername,'**'+playername+'** is playing '+playing,1))
+        try:
+            playing=response['session']['gameType']+' - '+response['session']['mode']+' - '+response['session']['map']
+            await io.reply(ctx,'',await builder.buildDesc('Online Status of '+playername,'**'+playername+'** is playing '+playing,1))
+        except KeyError:
+            playing=response['session']['gameType']+' - '+response['session']['mode']
+            await io.reply(ctx,'',await builder.buildDesc('Online Status of '+playername,'**'+playername+'** is playing '+playing,1))
     else:
         await io.reply(ctx,'',await builder.buildDesc('Online Status of '+playername,'**'+playername+'** is not online',1))
