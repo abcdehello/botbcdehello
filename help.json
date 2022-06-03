@@ -48,6 +48,9 @@
     "admin":{
         "stop":{
             "stop": "Terminates the bot."
+        },
+        "mute":{
+            "mute <user> <duration>": "If <user> has ongoing mute, extend it by <duration> seconds. Otherwise mute <user> for <duration> seconds."
         }
     }
 }
