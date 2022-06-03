@@ -16,6 +16,7 @@ import minesweeper as mine
 import wikipedia as wiki
 
 TOKEN=os.getenv('token')
+OWNER=str(os.getenv('owner_id'))
 
 bot=commands.Bot(command_prefix='&',intents=discord.Intents.all())
 bot.remove_command('help')
@@ -28,6 +29,23 @@ async def on_ready():
 @bot.event
 async def on_message(msg):
   await bot.process_commands(msg)
+
+@bot.event
+async def on_command_error(ctx,error):
+  if isinstance(error,commands.CommandNotFound):
+    await io.reply(ctx,'',await builder.buildDesc('Command Not Found','Please use `&help`',0))
+
+#Admin Commands
+
+@bot.command(aliases=['kill','stop'])
+async def halt(ctx):
+  if (str(ctx.author.id)!=OWNER):
+    await io.reply(ctx,'',await builder.buildDesc('Insufficient Permission','You cannot execute this command',0))
+    return
+  await io.send(ctx,'',await builder.buildDesc('Command Received','Bot stopping...',1))
+  exit()
+
+#Help Commands
 
 @bot.command(aliases=['h'])
 async def help(ctx,*args):
@@ -42,6 +60,9 @@ async def help(ctx,*args):
     return
   else:
     await listhelp.listsubcmd(ctx,name)
+
+#Misc Commands
+
 @bot.command(aliases=['sp'])
 async def spam(ctx,*args):
   try:
@@ -60,6 +81,8 @@ async def spam(ctx,*args):
   for i in range(cnt):
     await io.send(ctx,msg,None)
     await asyncio.sleep(0.75)
+
+#Search Commands
 
 @bot.command()
 async def userinfo(ctx,*args):
@@ -112,6 +135,7 @@ async def hypixel(ctx,*args):
       return
     await hyp.statusCheck(ctx,username)
   
+#Game Commands
 
 @bot.command(aliases=['ms'])
 async def minesweeper(ctx,*args):
@@ -181,8 +205,12 @@ async def cryptomine(ctx,*args):
   except:
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
     return
-  if (action=='shop'):
-    await miner.listshop(ctx,str(ctx.author.id))
+  if (action=='new'):
+    await miner.createprofile(ctx,str(ctx.author.id))
+  elif (action=='mineshop') or (action=='ms'):
+    await miner.listmineshop(ctx,str(ctx.author.id))
+  elif (action=='itemshop') or (action=='is'):
+    await miner.listitemshop(ctx)
   elif (action=='buy'):
     try:
       mine=str(args[1])
@@ -190,5 +218,44 @@ async def cryptomine(ctx,*args):
       await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
       return
     await miner.buymine(ctx,str(ctx.author.id),mine)
+  elif (action=='listmine') or (action=='lm'):
+    await miner.listmine(ctx,str(ctx.author.id))
+  elif (action=='sellmine') or (action=='sm'):
+    try:
+      id=int(args[1])
+    except:
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    if (id<1):
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    await miner.sellmine(ctx,str(ctx.author.id),id)
+  elif (action=='harvest'):
+    await miner.harvestmine(ctx,str(ctx.author.id))
+  elif (action=='inventory') or (action=='listinv'):
+    await miner.listinv(ctx,str(ctx.author.id))
+  elif (action=='sellitem'):
+    try:
+      item=str(args[1])
+      count=int(args[2])
+    except:
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    if (count<1):
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    await miner.sellitem(ctx,str(ctx.author.id),item,count)
+  elif (action=='upgrade') or (action=='up'):
+    try:
+      id=int(args[1])
+    except:
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    if (id<1):
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
+      return
+    await miner.upgrademine(ctx,str(ctx.author.id),id)
+  else:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `&help`',0))
 
 bot.run(TOKEN)
