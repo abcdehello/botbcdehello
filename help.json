@@ -9,17 +9,28 @@
             "minesweeper print": "Prints your minesweeper board."
         },
         "cryptomine":{
-            "cryptomine shop": "List all purchasable mines.",
-            "cryptomine buy <model>": "Purchases a <model> mine."
+            "cryptomine new": "Creates cryptomine profile",
+            "cryptomine mineshop": "List all purchasable mines and their prices.",
+            "cryptomine itemshop": "List all sellable items and their prices.",
+            "cryptomine buy <model>": "Purchases a <model> mine.",
+            "cryptomine upgrade <id>": "Upgrades your <id>-th mine by 1 level.",
+            "cryptomine sellitem <item> <amount>": "Sell <amount> <item>(s) for gascoins",
+            "cryptomine sellmine <id>": "Sells your <id>-th mine, refunding 90% of all gascoins spent on the mine.",
+            "cryptomine harvest": "Harvests all the mines you currently have.",
+            "cryptomine inventory": "Lists all the items you have in your inventory."
         }
     },
     "search":{
         "userinfo":{
-            "userinfo hamehistory <player>":"Lists the Minecraft name history of <player>",
-            "userinfo skin <player>":"Renders the current skin of <player>"
+            "userinfo hamehistory <player>": "Lists the Minecraft name history of <player>.",
+            "userinfo skin <player>": "Renders the current skin of <player>."
         },
         "wikipedia":{
-            "wikipedia search <title>":"Searches for articles with <title> on Wikipedia"
+            "wikipedia search <title>": "Searches for articles with <title> on Wikipedia."
+        },
+        "hypixel":{
+            "hypixel keycheck": "Queries if the Hypixel API key of bot is valid, and how many query quota is left.",
+            "hypixel status <player>": "Queries the online status of <player> in Hypixel Network."
         }
     },
     "support":{
@@ -32,6 +43,11 @@
     "misc":{
         "spam":{
             "spam <message> <amount>": "Spams <message> <amount> amount of times. (WARNING: spamming is bad)"
+        }
+    },
+    "admin":{
+        "stop":{
+            "stop": "Terminates the bot."
         }
     }
 }
