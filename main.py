@@ -31,7 +31,9 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg):
+  await asyncio.sleep(1)
   muted=await json.read('muted.json')
+  lastcmd=await json.read('lastcommand.json')
   if not (msg.content.startswith(PREFIX)):
     return
   try:
@@ -41,6 +43,15 @@ async def on_message(msg):
       return
   except:
     dummy=0
+  try:
+    untilnxtcmd=lastcmd[str(msg.author.id)]+3
+    if (untilnxtcmd>time.time()):
+      await io.reply(msg,'',await builder.buildDesc('Command Cooldown','Please wait '+str(untilnxtcmd-time.time())+' seconds before using next command',2))
+      return
+  except:
+    dummy=0
+  lastcmd[str(msg.author.id)]=time.time()
+  await json.write('lastcommand.json',lastcmd)
   await bot.process_commands(msg)
   
 
