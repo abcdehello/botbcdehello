@@ -24,6 +24,7 @@ async def createprofile(ctx,userid):
         userinfo[userid]={}
         userinfo[userid]['mines']=[]
         userinfo[userid]['inventory']={}
+        userinfo[userid]['isvip']=False
         await json.write('userinfo.json',userinfo)
         await io.reply(ctx,'',await builder.buildDesc('Profile Created','You now have a profile',1))
 
@@ -58,6 +59,12 @@ async def buymine(ctx,userid,mine):
     if not (mine in spec.keys()):
       await io.reply(ctx,'',await builder.buildDesc('Invalid Mine','Please use `^cryptomine mineshop`',0))
       return
+    if (not (userinfo[userid]['isvip'])) and (len(userinfo[userid]['mines'])==10):
+        await io.reply(ctx,'',await builder.buildDesc('Mine Slots Full','Please sell some of your mines or get VIP',0))
+        return
+    elif (userinfo[userid]['isvip']) and (len(userinfo[userid]['mines'])==20):
+        await io.reply(ctx,'',await builder.buildDesc('Mine Slots Full','Please sell some of your mines',0))
+        return
     money=await gascoin.getmon(userid)
     cost=math.floor(spec[mine]['buycost']*buymultiplier(len(userinfo[userid]['mines'])))
     if (money<cost):
@@ -116,7 +123,9 @@ async def listmine(ctx,userid):
     for mine in userinfo[userid]['mines']:
         cnt+=1
         title=str(cnt)+'. '+mine['model']+' (Lv '+str(mine['level'])+')'
-        desc='Costs '+str(math.floor(mine['upgradecost']*upgrademultiplier(mine['level'])))+' <:gascoin:981542532586569808> to upgrade.'
+        desc=''
+        desc+='Costs '+str(math.floor(mine['upgradecost']*upgrademultiplier(mine['level'])))+' <:gascoin:981542532586569808> to upgrade.\n'
+        desc+='Can be sold for '+str(math.floor((mine['buyspent']+mine['upgradespent'])*0.9))+' <:gascoin:981542532586569808>.'
         mines.append([title,desc])
     await io.reply(ctx,'',await builder.buildField('Your Mines',mines,1))
 
