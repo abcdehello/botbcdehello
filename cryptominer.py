@@ -56,7 +56,7 @@ async def buymine(ctx,userid,mine):
         await io.reply(ctx,'',await builder.buildDesc('Profile Do Not Exist','You don\'t have a profile',0))
         return
     if not (mine in spec.keys()):
-      await io.reply(ctx,'',await builder.buildDesc('Invalid Mine','Please use `&cryptomine mineshop`',0))
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Mine','Please use `^cryptomine mineshop`',0))
       return
     money=await gascoin.getmon(userid)
     cost=math.floor(spec[mine]['buycost']*buymultiplier(len(userinfo[userid]['mines'])))
@@ -109,7 +109,7 @@ async def listmine(ctx,userid):
         await io.reply(ctx,'',await builder.buildDesc('Profile Do Not Exist','You don\'t have a profile',0))
         return
     if (len(userinfo[userid]['mines'])==0):
-        await io.reply(ctx,'',await builder.buildDesc('You Do Not Own Any Mines','Please use `&cryptomine buy`',0))
+        await io.reply(ctx,'',await builder.buildDesc('You Do Not Own Any Mines','Please use `^cryptomine buy`',0))
         return
     cnt=0
     mines=[]
@@ -151,8 +151,9 @@ async def harvestmine(ctx,userid):
         await io.reply(ctx,'',await builder.buildDesc('Profile Do Not Exist','You don\'t have a profile',0))
         return
     reward={}
+    hascoin=False
     if (len(userinfo[userid]['mines'])==0):
-        await io.reply(ctx,'',await builder.buildDesc('You Do Not Own Any Mines','Please use `&cryptomine buy`',0))
+        await io.reply(ctx,'',await builder.buildDesc('You Do Not Own Any Mines','Please use `^cryptomine buy`',0))
         return
     for mine in userinfo[userid]['mines']:
         rph=math.floor(mine['rate']*harvestmultiplier(mine['level']))
@@ -164,15 +165,15 @@ async def harvestmine(ctx,userid):
             userinfo[userid]['inventory'][mine['type']]=0
         if (mine['type']!='gascoin'):
             userinfo[userid]['inventory'][mine['type']]+=rph*hrs
+        else:
+            hascoin=True
         try:
             dummy=reward[mine['type']]
         except KeyError:
             reward[mine['type']]=0
         reward[mine['type']]+=rph*hrs
-    try:
-        await gascoin.putmon(reward['gascoin'])
-    except:
-        dummy
+    if hascoin:
+        await gascoin.putmon(ctx,userid,reward['gascoin'])
     desc=''
     for item in reward.keys():
         desc+='`'+str(reward[item])+'x` **'+item+'**\n'
@@ -213,7 +214,7 @@ async def sellitem(ctx,userid,item,count):
         await io.reply(ctx,'',await builder.buildDesc('Profile Do Not Exist','You don\'t have a profile',0))
         return
     if not (item in prices.keys()):
-        await io.reply(ctx,'',await builder.buildDesc('Invalid Item','Please use `&cryptomine itemshop`',0))
+        await io.reply(ctx,'',await builder.buildDesc('Invalid Item','Please use `^cryptomine itemshop`',0))
         return
     try:
         dummy=userinfo[userid]['inventory'][item]
