@@ -9,15 +9,19 @@
             "minesweeper print": "Prints your minesweeper board."
         },
         "cryptomine":{
-            "cryptomine new": "Creates cryptomine profile",
-            "cryptomine mineshop": "List all purchasable mines and their prices.",
-            "cryptomine itemshop": "List all sellable items and their prices.",
+            "cryptomine new": "Creates cryptomine profile.",
+            "cryptomine list": "Lists all mines you currently have.",
+            "cryptomine shop": "List all sellable items and their prices.",
             "cryptomine buy <model>": "Purchases a <model> mine.",
             "cryptomine upgrade <id>": "Upgrades your <id>-th mine by 1 level.",
-            "cryptomine sellitem <item> <amount>": "Sell <amount> <item>(s) for gascoins",
-            "cryptomine sellmine <id>": "Sells your <id>-th mine, refunding 90% of all gascoins spent on the mine.",
-            "cryptomine harvest": "Harvests all the mines you currently have.",
-            "cryptomine inventory": "Lists all the items you have in your inventory."
+            "cryptomine sell <id>": "Sells your <id>-th mine, refunding 90% of all gascoins spent on the mine.",
+            "cryptomine harvest": "Harvests all the mines you currently have."
+        },
+        "item":{
+            "item shop": "List the sell prices of all items.",
+            "item sell <item> <amount>": "Sells <amount> <items> for gascoins.",
+            "item inventory": "List all the items you currently have.",
+            "item use <item> <amount>": "Uses <amount> <items> for it's effects."
         }
     },
     "search":{

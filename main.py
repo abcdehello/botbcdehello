@@ -2,6 +2,7 @@ import asyncio
 import discord
 from discord.ext import commands
 import os
+import math
 import time
 
 import embedbuilder as builder
@@ -12,6 +13,7 @@ import jsonprocessor as json
 import cryptominer as miner
 import help as listhelp
 import hypixel as hyp
+import item as it
 import minecraftinfo as mcinfo
 import minesweeper as mine
 import wikipedia as wiki
@@ -31,11 +33,12 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg):
+  print(msg.content)
+  if not (msg.content.startswith(PREFIX)):
+    return
   await asyncio.sleep(1)
   muted=await json.read('muted.json')
   lastcmd=await json.read('lastcommand.json')
-  if not (msg.content.startswith(PREFIX)):
-    return
   try:
     untilunmute=muted[str(msg.author.id)]
     if (untilunmute>=time.time()):
@@ -46,12 +49,13 @@ async def on_message(msg):
   try:
     untilnxtcmd=lastcmd[str(msg.author.id)]+3
     if (untilnxtcmd>time.time()):
-      await io.reply(msg,'',await builder.buildDesc('Command Cooldown','Please wait '+str(untilnxtcmd-time.time())+' seconds before using next command',2))
+      await io.reply(msg,'',await builder.buildDesc('Command Cooldown','Please wait '+str(math.ceil(untilnxtcmd-time.time()))+' seconds before using next command',2))
       return
   except:
     dummy=0
   lastcmd[str(msg.author.id)]=time.time()
   await json.write('lastcommand.json',lastcmd)
+  print(msg.author.name+'#'+str(msg.author.discriminator)+' has issued a command: '+str(msg.content))
   await bot.process_commands(msg)
   
 
@@ -199,7 +203,7 @@ async def minesweeper(ctx,*args):
       await mine.makeBoard(str(ctx.author.id),10,23)
       await mine.printBoard(ctx,str(ctx.author.id))
     elif (diff=='extreme'):
-      await mine.makeBoard(str(ctx.author.id),14,36)
+      await mine.makeBoard(str(ctx.author.id),12,28)
       await mine.printBoard(ctx,str(ctx.author.id))
     else:
       await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
@@ -246,10 +250,8 @@ async def cryptomine(ctx,*args):
     return
   if (action=='new'):
     await miner.createprofile(ctx,str(ctx.author.id))
-  elif (action=='mineshop') or (action=='ms'):
-    await miner.listmineshop(ctx,str(ctx.author.id))
-  elif (action=='itemshop') or (action=='is'):
-    await miner.listitemshop(ctx)
+  elif (action=='shop'):
+    await miner.listshop(ctx,str(ctx.author.id))
   elif (action=='buy'):
     try:
       mine=str(args[1])
@@ -257,9 +259,9 @@ async def cryptomine(ctx,*args):
       await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
       return
     await miner.buymine(ctx,str(ctx.author.id),mine)
-  elif (action=='listmine') or (action=='lm'):
+  elif (action=='list'):
     await miner.listmine(ctx,str(ctx.author.id))
-  elif (action=='sellmine') or (action=='sm'):
+  elif (action=='sell'):
     try:
       id=int(args[1])
     except:
@@ -271,19 +273,6 @@ async def cryptomine(ctx,*args):
     await miner.sellmine(ctx,str(ctx.author.id),id)
   elif (action=='harvest'):
     await miner.harvestmine(ctx,str(ctx.author.id))
-  elif (action=='inventory') or (action=='listinv'):
-    await miner.listinv(ctx,str(ctx.author.id))
-  elif (action=='sellitem'):
-    try:
-      item=str(args[1])
-      count=int(args[2])
-    except:
-      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
-      return
-    if (count<1):
-      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
-      return
-    await miner.sellitem(ctx,str(ctx.author.id),item,count)
   elif (action=='upgrade') or (action=='up'):
     try:
       id=int(args[1])
@@ -294,6 +283,42 @@ async def cryptomine(ctx,*args):
       await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
       return
     await miner.upgrademine(ctx,str(ctx.author.id),id)
+  else:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+
+@bot.command(aliases=['it'])
+async def item(ctx,*args):
+  try:
+    action=str(args[0])
+  except:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+    return
+  if (action=='shop'):
+    await it.listshop(ctx)
+  elif (action=='inventory') or (action=='listinv'):
+    await it.listinv(ctx,str(ctx.author.id))
+  elif (action=='sell'):
+    try:
+      itemm=str(args[1])
+      count=int(args[2])
+    except:
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+      return
+    if (count<1):
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+      return
+    await it.sellitem(ctx,str(ctx.author.id),itemm,count)
+  elif (action=='use'):
+    try:
+      itemm=str(args[1])
+      count=int(args[2])
+    except:
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+      return
+    if (count<1):
+      await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+      return
+    await it.useitem(ctx,str(ctx.author.id),itemm,count)
   else:
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
 
