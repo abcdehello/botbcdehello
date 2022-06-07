@@ -61,7 +61,7 @@ async def sellitem(ctx,userid,item,count):
 async def useitem(ctx,userid,item,count):
     userinfo=await json.read('userinfo.json')
     try:
-        nextuse=userinfo[userid]['lastitemuse']+60
+        nextuse=userinfo[userid]['lastitemuse']+10
         if (nextuse>time.time()):
             await io.reply(ctx,'',await builder.buildDesc('Item Usage on Cooldown','Please wait '+str(math.ceil(nextuse-time.time()))+' more seconds before using an item',2))
             return
@@ -72,14 +72,15 @@ async def useitem(ctx,userid,item,count):
     except:
         await io.reply(ctx,'',await builder.buildDesc('Invalid Item','This item does not exist or you do not own any of it',0))
         return
-    userinfo[userid]['lastitemuse']=time.time()
-    await json.write('userinfo.json',userinfo)
-    await asyncio.sleep(1)
-    if (item=='suppository'):
-        await use.suppository(ctx,userid,count)
-    elif (item=='stan'):
+    if (item=='stan'):
+        userinfo[userid]['lastitemuse']=time.time()
+        await json.write('userinfo.json',userinfo)
+        await asyncio.sleep(1)
         await use.stan(ctx,userid,count)
     elif (item=='fries'):
+        userinfo[userid]['lastitemuse']=time.time()
+        await json.write('userinfo.json',userinfo)
+        await asyncio.sleep(1)
         await use.fries(ctx,userid,count)
     else:
         await io.reply(ctx,'',await builder.buildDesc('Invalid Item','This item does not exist or cannot be used',0))
