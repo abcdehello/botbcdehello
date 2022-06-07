@@ -1,37 +1,37 @@
 {
-    "GL-0001":{
-        "name":"Garage Laptop",
-        "type":"gascoin",
-        "rate":128,
-        "buycost":5000,
-        "upgradecost":2000
+    "FR-1234":{
+        "name":"Fries Cooker",
+        "type":"fries",
+        "rate":15,
+        "buycost":3000,
+        "upgradecost":100
     },
-    "8D-6969":{
-        "name":"Kabi Drill",
-        "type":"suppository",
-        "rate":69,
-        "buycost":4200,
-        "upgradecost":1069
-    },
-    "HPC-9999":{
-        "name":"Hecker PC",
-        "type":"gascoin",
-        "rate":375,
-        "buycost":24680,
-        "upgradecost":13579
-    },
-    "KM-69420":{
-        "name":"Dickson Hammer",
-        "type":"karma",
-        "rate":111,
-        "buycost":8888,
-        "upgradecost":4200
-    },
-    "ST-KILL":{
+    "ST-0000":{
         "name":"Orphan Obliterator",
         "type":"stan",
-        "rate":420,
-        "buycost":6969,
-        "upgradecost":6969
+        "rate":20,
+        "buycost":4000,
+        "upgradecost":150
+    },
+    "CM-2000":{
+        "name":"Crypto Miner 2000",
+        "type":"gascoin",
+        "rate":200,
+        "buycost":7500,
+        "upgradecost":6000
+    },
+    "KB-6969":{
+        "name":"Kabi Drill",
+        "type":"suppository",
+        "rate":10,
+        "buycost":6000,
+        "upgradecost":150
+    },
+    "KM-1111":{
+        "name":"Dickson Hammer",
+        "type":"karma",
+        "rate":20,
+        "buycost":10000,
+        "upgradecost":130
     }
 }
