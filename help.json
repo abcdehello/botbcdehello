@@ -13,7 +13,7 @@
             "cryptomine list": "Lists all mines you currently have.",
             "cryptomine shop": "List all sellable items and their prices.",
             "cryptomine buy <model>": "Purchases a <model> mine.",
-            "cryptomine upgrade <id>": "Upgrades your <id>-th mine by 1 level.",
+            "cryptomine upgrade <id> <level>": "Upgrades your <id>-th mine by <level> level, or until you run out of materials.",
             "cryptomine sell <id>": "Sells your <id>-th mine, refunding 90% of all gascoins spent on the mine.",
             "cryptomine harvest": "Harvests all the mines you currently have."
         },

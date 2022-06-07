@@ -13,7 +13,7 @@ def upgrademultiplier(lvl):
     return 0.23561*math.pow(lvl,1.352)+0.5
 
 def harvestmultiplier(lvl):
-    return 0.73*math.log(lvl)+0.26
+    return 2.73*math.log(lvl)+1.26
 
 async def createprofile(ctx,userid):
     userinfo=await json.read('userinfo.json')
@@ -86,6 +86,7 @@ async def buymine(ctx,userid,mine):
 
 async def sellmine(ctx,userid,mineid):
     userinfo=await json.read('userinfo.json')
+    sellprice=await json.read('itemprice.json')
     try:
         dummy=userinfo[userid]
     except KeyError:
@@ -95,9 +96,10 @@ async def sellmine(ctx,userid,mineid):
         await io.reply(ctx,'',await builder.buildDesc('Invalid ID','You do not own that many mines',0))
         return
     mineid-=1
+    mine=userinfo[userid]['mines'][mineid]
     usermines=[]
     sellmine={}
-    sellprice=math.floor((userinfo[userid]['mines'][mineid]['buyspent']+userinfo[userid]['mines'][mineid]['upgradespent'])*0.9)
+    sellprice=math.floor((mine['buyspent']+mine['upgradespent']*sellprice[mine['type']])*0.9)
     for i in range (len(userinfo[userid]['mines'])):
         if (i!=mineid):
             usermines.append(userinfo[userid]['mines'][i])
@@ -110,6 +112,7 @@ async def sellmine(ctx,userid,mineid):
 
 async def listmine(ctx,userid):
     userinfo=await json.read('userinfo.json')
+    sellprice=await json.read('itemprice.json')
     try:
         dummy=userinfo[userid]
     except KeyError:
@@ -125,13 +128,13 @@ async def listmine(ctx,userid):
         title=str(cnt)+'. '+mine['model']+' (Lv '+str(mine['level'])+')'
         rph=math.floor(mine['rate']*harvestmultiplier(mine['level']))
         desc=''
-        desc+='Costs '+str(math.floor(mine['upgradecost']*upgrademultiplier(mine['level'])))+' <:gascoin:981542532586569808> to upgrade.\n'
+        desc+='Costs '+str(math.floor(mine['upgradecost']*upgrademultiplier(mine['level'])))+' '+mine['type']+'(s) to upgrade.\n'
         desc+='Generates '+str(math.floor(rph))+' item(s) per hour.\n'
-        desc+='Can be sold for '+str(math.floor((mine['buyspent']+mine['upgradespent'])*0.9))+' <:gascoin:981542532586569808>.'
+        desc+='Can be sold for '+str(math.floor((mine['buyspent']+mine['upgradespent']*sellprice[mine['type']])*0.9))+' <:gascoin:981542532586569808>.'
         mines.append([title,desc])
     await io.reply(ctx,'',await builder.buildField('Your Mines',mines,1))
 
-async def upgrademine(ctx,userid,mineid):
+async def upgrademine(ctx,userid,mineid,level):
     userinfo=await json.read('userinfo.json')
     try:
         dummy=userinfo[userid]
@@ -142,14 +145,28 @@ async def upgrademine(ctx,userid,mineid):
         await io.reply(ctx,'',await builder.buildDesc('Invalid ID','You do not own that many mines',0))
         return
     mineid-=1
-    money=await gascoin.getmon(userid)
-    cost=math.floor(userinfo[userid]['mines'][mineid]['upgradecost']*upgrademultiplier(userinfo[userid]['mines'][mineid]['level']))
-    if (money<cost):
-        await io.reply(ctx,'',await builder.buildDesc('Too Broke','Imagine don\'t have enough money L',0))
-        return
-    userinfo[userid]['mines'][mineid]['level']+=1
-    userinfo[userid]['mines'][mineid]['upgradespent']+=cost
-    await gascoin.putmon(ctx,userid,-cost)
+    mine=userinfo[userid]['mines'][mineid]
+    for i in range(level):
+        if (mine['type']=='gascoin'):
+            mat=await gascoin.getmon(userid)
+        else:
+            try:
+                mat=userinfo[userid]['inventory'][mine['type']]
+            except:
+                mat=0
+        cost=math.floor(mine['upgradecost']*upgrademultiplier(mine['level']))
+        if (mat<cost):
+            if (i==0):
+                await io.reply(ctx,'',await builder.buildDesc('Too Broke','Imagine don\'t have enough material(s)/money L',0))
+            else:
+                await io.reply(ctx,'',await builder.buildDesc('Upgrade Successful','Your '+userinfo[userid]['mines'][mineid]['model']+' has been upgraded to Lv '+str(userinfo[userid]['mines'][mineid]['level'])+'!',1))
+            return
+        if (mine['type']=='gascoin'):
+            await gascoin.putmon(ctx,userid,-cost)
+        else:
+            userinfo[userid]['inventory'][mine['type']]-=cost
+            userinfo[userid]['mines'][mineid]['level']+=1
+            userinfo[userid]['mines'][mineid]['upgradespent']+=cost
     await json.write('userinfo.json',userinfo)
     await io.reply(ctx,'',await builder.buildDesc('Upgrade Successful','Your '+userinfo[userid]['mines'][mineid]['model']+' has been upgraded to Lv '+str(userinfo[userid]['mines'][mineid]['level'])+'!',1))
     

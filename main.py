@@ -11,6 +11,7 @@ import jsonprocessor as json
 
 
 import cryptominer as miner
+import forcesell as sell
 import help as listhelp
 import hypixel as hyp
 import item as it
@@ -33,7 +34,6 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg):
-  print(msg.content)
   if not (msg.content.startswith(PREFIX)):
     return
   await asyncio.sleep(1)
@@ -86,6 +86,47 @@ async def mute(ctx,*args):
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
     return
   await mu.mute(ctx,str(user),dura)
+
+@bot.command(aliases=['status'])
+async def changestatus(ctx,*args):
+  if (str(ctx.author.id)!=OWNER):
+    await io.reply(ctx,'',await builder.buildDesc('Insufficient Permission','You cannot execute this command',0))
+    return
+  try:
+    action=str(args[0])
+    content=''
+    for i in range(1,len(args)):
+      if (i>1):
+        content+=' '
+      content+=str(args[i])
+  except:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+    return
+  activity=discord.Activity()
+  if (action=='listen'):
+    activity.type=discord.ActivityType.listening
+  elif (action=='play'):
+    activity.type=discord.ActivityType.playing
+  elif (action=='watch'):
+    activity.type=discord.ActivityType.watching
+  else:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+    return
+  activity.name=content
+  await bot.change_presence(activity=activity)
+  await io.reply(ctx,'',await builder.buildDesc('Status Changed','Status changed to '+action+'ing '+content,1))
+    
+@bot.command(aliases=['fs'])
+async def forcesell(ctx,*args):
+  if (str(ctx.author.id)!=OWNER):
+    await io.reply(ctx,'',await builder.buildDesc('Insufficient Permission','You cannot execute this command',0))
+    return
+  try:
+    userid=str(args[0])
+  except:
+    await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
+    return
+  await sell.sell(ctx,userid)
 
 #Help Commands
 
@@ -276,13 +317,14 @@ async def cryptomine(ctx,*args):
   elif (action=='upgrade') or (action=='up'):
     try:
       id=int(args[1])
+      lvl=int(args[2])
     except:
       await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
       return
     if (id<1):
       await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
       return
-    await miner.upgrademine(ctx,str(ctx.author.id),id)
+    await miner.upgrademine(ctx,str(ctx.author.id),id,lvl)
   else:
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
 
