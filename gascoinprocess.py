@@ -16,6 +16,6 @@ async def putmon(ctx,userid,amount):
     await getmon(userid)
     collection.update_one({"_id":str(userid)},{"$inc":{"money":amount}})
     if (amount>=0):
-        await io.reply(ctx,'',await builder.buildDesc('You Earned Gascoins','You gained '+str(int(amount))+' <:gascoin:981542532586569808>',1))
+        await io.reply(ctx,'',await builder.buildDesc('You Earned Gascoins','<@'+userid+'>, you gained '+str(int(amount))+' <:gascoin:981542532586569808>',1))
     else:
-        await io.reply(ctx,'',await builder.buildDesc('You Lost Gascoins','You lost '+str(-int(amount))+' <:gascoin:981542532586569808>',1))
+        await io.reply(ctx,'',await builder.buildDesc('You Lost Gascoins','<@'+userid+'>, You lost '+str(-int(amount))+' <:gascoin:981542532586569808>',1))
