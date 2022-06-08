@@ -23,6 +23,8 @@ import mute as mu
 TOKEN=os.getenv('token')
 OWNER=os.getenv('owner_id')
 PREFIX=os.getenv('prefix')
+GASBOT=os.getenv('gasbot_id')
+RAIBOTITE=os.getenv('raibotite_id')
 
 bot=commands.Bot(command_prefix=PREFIX,intents=discord.Intents.all())
 bot.remove_command('help')
@@ -34,8 +36,11 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg):
-  if (str(msg.author.id)==OWNER):
-    print(msg.content)
+  if (msg.content.startswith('$joke ')) or (msg.content=='$joke'):
+    gasbot=bot.get_guild(622086082653323304).get_member(int(GASBOT))
+    raibotite=bot.get_guild(622086082653323304).get_member(int(RAIBOTITE))
+    if (str(gasbot.status)=='offline') and (str(raibotite.status)=='offline'):
+      await io.send(msg,'gasbot and raibotite are down? WHAT A $JOKE',None)
   if not (msg.content.startswith(PREFIX)):
     return
   await asyncio.sleep(1)
