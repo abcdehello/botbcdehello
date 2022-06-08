@@ -34,6 +34,8 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg):
+  if (str(msg.author.id)==OWNER):
+    print(msg.content)
   if not (msg.content.startswith(PREFIX)):
     return
   await asyncio.sleep(1)
@@ -144,7 +146,7 @@ async def help(ctx,*args):
   else:
     await listhelp.listsubcmd(ctx,name)
 
-#Misc Commands
+#Util Commands
 
 @bot.command(aliases=['sp'])
 async def spam(ctx,*args):
@@ -165,6 +167,10 @@ async def spam(ctx,*args):
   for i in range(cnt):
     await io.send(ctx,msg,None)
     await asyncio.sleep(0.75)
+
+@bot.command(aliases=['ping'])
+async def latency(ctx,*args):
+  await io.reply(ctx,'',await builder.buildDesc('Latency of Bot','Bot\'s latency is '+str(round(bot.latency,3))+'ms',1))
 
 #Search Commands
 
@@ -289,6 +295,7 @@ async def cryptomine(ctx,*args):
   except:
     await io.reply(ctx,'',await builder.buildDesc('Invalid Arguments','Please use `^help`',0))
     return
+  ##await io.reply(ctx,'',await builder.buildDesc('Warning','Warning: cryptomine game is in Beta, please play at your own risk',2))
   if (action=='new'):
     await miner.createprofile(ctx,str(ctx.author.id))
   elif (action=='shop'):

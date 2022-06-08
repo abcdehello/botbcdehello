@@ -113,6 +113,7 @@ async def sellmine(ctx,userid,mineid):
 async def listmine(ctx,userid):
     userinfo=await json.read('userinfo.json')
     sellprice=await json.read('itemprice.json')
+    sellprice['gascoin']=1
     try:
         dummy=userinfo[userid]
     except KeyError:
@@ -145,6 +146,7 @@ async def upgrademine(ctx,userid,mineid,level):
         await io.reply(ctx,'',await builder.buildDesc('Invalid ID','You do not own that many mines',0))
         return
     mineid-=1
+    total=0
     for i in range(level):
         mine=userinfo[userid]['mines'][mineid]
         if (mine['type']=='gascoin'):
@@ -158,15 +160,22 @@ async def upgrademine(ctx,userid,mineid,level):
         if (mat<cost):
             if (i==0):
                 await io.reply(ctx,'',await builder.buildDesc('Too Broke','Imagine don\'t have enough material(s)/money L',0))
+                return
             else:
                 await io.reply(ctx,'',await builder.buildDesc('Upgrade Successful','Your '+userinfo[userid]['mines'][mineid]['model']+' has been upgraded to Lv '+str(userinfo[userid]['mines'][mineid]['level'])+'!',1))
-            return
-        if (mine['type']=='gascoin'):
-            await gascoin.putmon(ctx,userid,-cost)
-        else:
-            userinfo[userid]['inventory'][mine['type']]-=cost
-            userinfo[userid]['mines'][mineid]['level']+=1
-            userinfo[userid]['mines'][mineid]['upgradespent']+=cost
+                if (mine['type']!='gascoin'):
+                    userinfo[userid]['inventory'][mine['type']]-=total
+                else:
+                    await gascoin.putmon(ctx,userid,-total)
+                await json.write('userinfo.json',userinfo)
+                return
+        total+=cost
+        userinfo[userid]['mines'][mineid]['level']+=1
+        userinfo[userid]['mines'][mineid]['upgradespent']+=cost
+    if (mine['type']!='gascoin'):
+        userinfo[userid]['inventory'][mine['type']]-=total
+    else:
+        await gascoin.putmon(ctx,userid,-total)
     await json.write('userinfo.json',userinfo)
     await io.reply(ctx,'',await builder.buildDesc('Upgrade Successful','Your '+userinfo[userid]['mines'][mineid]['model']+' has been upgraded to Lv '+str(userinfo[userid]['mines'][mineid]['level'])+'!',1))
     
