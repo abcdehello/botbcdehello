@@ -145,8 +145,8 @@ async def upgrademine(ctx,userid,mineid,level):
         await io.reply(ctx,'',await builder.buildDesc('Invalid ID','You do not own that many mines',0))
         return
     mineid-=1
-    mine=userinfo[userid]['mines'][mineid]
     for i in range(level):
+        mine=userinfo[userid]['mines'][mineid]
         if (mine['type']=='gascoin'):
             mat=await gascoin.getmon(userid)
         else:
